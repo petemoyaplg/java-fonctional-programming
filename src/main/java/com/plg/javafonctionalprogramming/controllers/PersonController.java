@@ -35,4 +35,10 @@ public class PersonController {
     Map<String, List<Person>> mapPerson = this.personService.findAllGender();
     return ResponseEntity.ok().body(mapPerson);
   }
+
+  @GetMapping("v1/list-sort-by-gender")
+  public ResponseEntity<Map<String, List<Person>>> sortByAge() {
+    Map<String, List<Person>> mapPerson = this.personService.sortByAge();
+    return ResponseEntity.ok().body(mapPerson);
+  }
 }

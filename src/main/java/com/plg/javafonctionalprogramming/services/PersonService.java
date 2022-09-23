@@ -41,4 +41,19 @@ public class PersonService {
     mapPerson.put("males", males);
     return mapPerson;
   }
+
+  @Transactional
+  public Map<String, List<Person>> sortByAge() {
+    Map<String, List<Person>> mapPerson = new HashMap<>();
+    List<Person> poeple = this.personRepository.findAll();
+    List<Person> sortByAge = poeple.stream()
+        .sorted(Comparator.comparing(Person::getAge).thenComparing(Person::getGender))
+        .collect(Collectors.toList());
+    List<Person> sortByAgereverse = poeple.stream()
+				.sorted(Comparator.comparing(Person::getAge).thenComparing(Person::getGender).reversed())
+				.collect(Collectors.toList());
+    mapPerson.put("sortByAge", sortByAge);
+    mapPerson.put("sortByAgereverse", sortByAgereverse);
+    return mapPerson;
+  }
 }

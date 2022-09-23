@@ -66,40 +66,7 @@ public class JavaFonctionalProgrammingApplication implements CommandLineRunner {
 
 	private void test() {
 		List<Person> poeple = getPeople();
-		// Imperative approach
-		List<Person> females = new ArrayList<>();
-		for (Person person : poeple) {
-			if (person.getGender().equals(Gender.FEMALE)) {
-				females.add(person);
-			}
-		}
-		System.out.println("===========================================================");
-		System.out.println("Imperative approach");
-		females.forEach(System.out::println);
-		System.out.println("===========================================================");
-		// Declarative approach
 
-		// Filter
-		females = poeple.stream()
-				.filter(person -> person.getGender().equals(Gender.FEMALE))
-				.collect(Collectors.toList());
-		System.out.println("Declarative approach/Filter");
-		females.forEach(System.out::println);
-		System.out.println("===========================================================");
-		// Sort
-		females = poeple.stream()
-				.sorted(Comparator.comparing(Person::getAge).thenComparing(Person::getGender))
-				.collect(Collectors.toList());
-		System.out.println("Declarative approach/Sort");
-		females.forEach(System.out::println);
-		System.out.println("===========================================================");
-		// Sort reverse
-		females = poeple.stream()
-				.sorted(Comparator.comparing(Person::getAge).thenComparing(Person::getGender).reversed())
-				.collect(Collectors.toList());
-		System.out.println("Declarative approach/Sort reverse");
-		females.forEach(System.out::println);
-		System.out.println("===========================================================");
 		// All match
 		boolean allMatch = poeple.stream().allMatch(person -> person.getAge() > 8);
 		System.out.println("Declarative approach/All match");
