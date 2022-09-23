@@ -82,20 +82,6 @@ public class JavaFonctionalProgrammingApplication implements CommandLineRunner {
 		System.out.println("Declarative approach/None match");
 		System.out.println("noneMatch = " + noneMatch);
 		System.out.println("===========================================================");
-		// Max
-		Optional<Person> max = poeple.stream()
-				.max(Comparator.comparing(Person::getAge));
-		// .ifPresent(System.out::printn);
-		System.out.println("Declarative approach/Max match");
-		System.out.println("max = " + max);
-		System.out.println("===========================================================");
-		// Min
-		Optional<Person> min = poeple.stream()
-				.min(Comparator.comparing(Person::getAge));
-		// .ifPresent(System.out::printn);
-		System.out.println("Declarative approach/Max match");
-		System.out.println("min = " + min);
-		System.out.println("===========================================================");
 		// Group
 		Map<Gender, List<Person>> groupByGender = poeple.stream().collect(Collectors.groupingBy(Person::getGender));
 		groupByGender.forEach((gender, persons) -> {

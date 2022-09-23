@@ -41,4 +41,17 @@ public class PersonController {
     Map<String, List<Person>> mapPerson = this.personService.sortByAge();
     return ResponseEntity.ok().body(mapPerson);
   }
+
+  // the oldest and the youngest
+  @GetMapping("v1/oldest-youngest")
+  public ResponseEntity<Map<String, Person>> oldestAndYoungest() {
+    Map<String, Person> mapPerson = this.personService.oldestAndYoungest();
+    return ResponseEntity.ok().body(mapPerson);
+  }
+
+  @GetMapping("v1/oldests-youngests")
+  public ResponseEntity<Map<String, List<Person>>> oldestAndYoungests() {
+    Map<String, List<Person>> mapPerson = this.personService.oldestAndYoungests();
+    return ResponseEntity.ok().body(mapPerson);
+  }
 }

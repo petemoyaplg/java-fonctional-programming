@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,10 +51,37 @@ public class PersonService {
         .sorted(Comparator.comparing(Person::getAge).thenComparing(Person::getGender))
         .collect(Collectors.toList());
     List<Person> sortByAgereverse = poeple.stream()
-				.sorted(Comparator.comparing(Person::getAge).thenComparing(Person::getGender).reversed())
-				.collect(Collectors.toList());
+        .sorted(Comparator.comparing(Person::getAge).thenComparing(Person::getGender).reversed())
+        .collect(Collectors.toList());
     mapPerson.put("sortByAge", sortByAge);
     mapPerson.put("sortByAgereverse", sortByAgereverse);
+    return mapPerson;
+  }
+
+  @Transactional
+  public Map<String, Person> oldestAndYoungest() {
+    Map<String, Person> mapPerson = new HashMap<>();
+    List<Person> poeple = this.personRepository.findAll();
+    Optional<Person> oldest = poeple.stream()
+        .max(Comparator.comparing(Person::getAge));
+    Optional<Person> youngest = poeple.stream()
+        .min(Comparator.comparing(Person::getAge));
+    mapPerson.put("oldest", oldest.get());
+    mapPerson.put("youngest", youngest.get());
+    return mapPerson;
+  }
+
+  @Transactional
+  public Map<String, List<Person>> oldestAndYoungests() {
+    Map<String, List<Person>> mapPerson = new HashMap<>();
+    List<Person> poeple = this.personRepository.findAll();
+    Map<String, Person> oldestAndYoungest = this.oldestAndYoungest();
+    Person oldest = oldestAndYoungest.get("oldest");
+    List<Person> oldests = poeple.stream().filter(person -> person.getAge() == oldest.getAge()).collect(Collectors.toList());
+    Person youngest = oldestAndYoungest.get("youngest");
+    List<Person> youngests = poeple.stream().filter(person -> person.getAge() == youngest.getAge()).collect(Collectors.toList());
+    mapPerson.put("oldests", oldests);
+    mapPerson.put("youngests", youngests);
     return mapPerson;
   }
 }
