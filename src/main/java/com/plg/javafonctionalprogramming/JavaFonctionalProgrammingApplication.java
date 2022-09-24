@@ -2,13 +2,9 @@ package com.plg.javafonctionalprogramming;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -35,23 +31,29 @@ public class JavaFonctionalProgrammingApplication implements CommandLineRunner {
 
 	private List<Person> getPeople() {
 		List<Person> poeple = new ArrayList<>();
-		for (int i = 0; i < 500; i++) {
+		for (int i = 0; i < 10; i++) {
 			Faker faker = new Faker(new Locale("us-US"));
 			String firstName = faker.name().firstName();
 			String lastName = faker.name().lastName();
 			String address = faker.address().streetAddress();
 			String country = faker.address().country();
 			String phoneNumber = faker.phoneNumber().cellPhone();
-			String email = firstName.toLowerCase() + faker.bothify("##@gmail.com");
+			double height = ThreadLocalRandom.current().nextDouble(1.45, 2.5);
+			double weight = ThreadLocalRandom.current().nextDouble(45, 250);
+			int randomNum = ThreadLocalRandom.current().nextInt(0, 5);
+			String[] extentions = { "@gmail.com", "@rawsur.com", "@vodacom.com", "@airtel.com", "@rawbank.com" };
+			StringBuilder email = new StringBuilder(firstName.toLowerCase()).append(faker.bothify("##"))
+					.append(extentions[randomNum]);
 			long minDay = LocalDate.of(1970, 1, 1).toEpochDay();
-			long maxDay = LocalDate.of(2005, 12, 31).toEpochDay();
+			long maxDay = LocalDate.of(2015, 12, 31).toEpochDay();
 			long randomDay = ThreadLocalRandom.current().nextLong(minDay, maxDay);
 			LocalDate randomDate = LocalDate.ofEpochDay(randomDay);
 
-			int randomNum = ThreadLocalRandom.current().nextInt(1, 3);
+			randomNum = ThreadLocalRandom.current().nextInt(1, 3);
 			Gender gender = Gender.values()[randomNum - 1];
 
-			Person person = new Person(firstName, lastName, gender, randomDate, email, phoneNumber, address, country);
+			Person person = new Person(firstName, lastName, gender, randomDate, email.toString(), phoneNumber, address,
+					country, height, weight);
 			poeple.add(person);
 		}
 		return poeple;
@@ -59,42 +61,46 @@ public class JavaFonctionalProgrammingApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		List<Person> people = this.getPeople();
+		log.info("Get Poeple");
+		this.personService.saveAll(people);
 		log.info("Serveur run");
-		// List<Person> people = this.getPeople();
-		// this.personService.saveAll(people);
 	}
 
-	private void test() {
-		List<Person> poeple = getPeople();
+	// private void test() {
+	// List<Person> poeple = getPeople();
 
-		// All match
-		boolean allMatch = poeple.stream().allMatch(person -> person.getAge() > 8);
-		System.out.println("Declarative approach/All match");
-		System.out.println("allMatch = " + allMatch);
-		System.out.println("===========================================================");
-		// Any match
-		boolean anyMatch = poeple.stream().anyMatch(person -> person.getAge() > 8);
-		System.out.println("Declarative approach/Any match");
-		System.out.println("anyMatch = " + anyMatch);
-		System.out.println("===========================================================");
-		// None match
-		boolean noneMatch = poeple.stream().noneMatch(person -> person.getFname().equals("Antonio"));
-		System.out.println("Declarative approach/None match");
-		System.out.println("noneMatch = " + noneMatch);
-		System.out.println("===========================================================");
-		// Group
-		Map<Gender, List<Person>> groupByGender = poeple.stream().collect(Collectors.groupingBy(Person::getGender));
-		groupByGender.forEach((gender, persons) -> {
-			System.out.println(gender);
-			persons.forEach(System.out::println);
-			System.out.println("");
-		});
+	// // All match
+	// boolean allMatch = poeple.stream().allMatch(person -> person.getAge() > 8);
+	// System.out.println("Declarative approach/All match");
+	// System.out.println("allMatch = " + allMatch);
+	// System.out.println("===========================================================");
+	// // Any match
+	// boolean anyMatch = poeple.stream().anyMatch(person -> person.getAge() > 8);
+	// System.out.println("Declarative approach/Any match");
+	// System.out.println("anyMatch = " + anyMatch);
+	// System.out.println("===========================================================");
+	// // None match
+	// boolean noneMatch = poeple.stream().noneMatch(person ->
+	// person.getFname().equals("Antonio"));
+	// System.out.println("Declarative approach/None match");
+	// System.out.println("noneMatch = " + noneMatch);
+	// System.out.println("===========================================================");
+	// // Group
+	// Map<Gender, List<Person>> groupByGender =
+	// poeple.stream().collect(Collectors.groupingBy(Person::getGender));
+	// groupByGender.forEach((gender, persons) -> {
+	// System.out.println(gender);
+	// persons.forEach(System.out::println);
+	// System.out.println("");
+	// });
 
-		System.out.println("===========================================================");
-		Optional<String> oldestFemaleAge = poeple.stream().filter(person -> person.getGender().equals(Gender.FEMALE))
-				.max(Comparator.comparing(Person::getAge))
-				.map(Person::getFname);
-		oldestFemaleAge.ifPresent(System.out::println);
-	}
+	// System.out.println("===========================================================");
+	// Optional<String> oldestFemaleAge = poeple.stream().filter(person ->
+	// person.getGender().equals(Gender.FEMALE))
+	// .max(Comparator.comparing(Person::getAge))
+	// .map(Person::getFname);
+	// oldestFemaleAge.ifPresent(System.out::println);
+	// }
 
 }
