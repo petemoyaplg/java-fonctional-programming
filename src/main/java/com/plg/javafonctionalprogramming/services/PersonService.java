@@ -8,6 +8,10 @@ import java.util.stream.Collectors;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,8 +30,13 @@ public class PersonService {
   }
 
   @Transactional
-  public List<Person> findByAll() {
-    return this.personRepository.findAll();
+  public Page<Person> findByAll(int page, int size) {
+    Sort fnameSort = Sort.by(Direction.DESC, "fname");
+    Sort lnameSort = Sort.by(Direction.DESC, "lname");
+
+    Sort groupBySort = fnameSort.and(lnameSort);
+
+    return this.personRepository.findAll(PageRequest.of(page, size, groupBySort));
   }
 
   @Transactional
@@ -77,9 +86,11 @@ public class PersonService {
     List<Person> poeple = this.personRepository.findAll();
     Map<String, Person> oldestAndYoungest = this.oldestAndYoungest();
     Person oldest = oldestAndYoungest.get("oldest");
-    List<Person> oldests = poeple.stream().filter(person -> person.getAge() == oldest.getAge()).collect(Collectors.toList());
+    List<Person> oldests = poeple.stream().filter(person -> person.getAge() == oldest.getAge())
+        .collect(Collectors.toList());
     Person youngest = oldestAndYoungest.get("youngest");
-    List<Person> youngests = poeple.stream().filter(person -> person.getAge() == youngest.getAge()).collect(Collectors.toList());
+    List<Person> youngests = poeple.stream().filter(person -> person.getAge() == youngest.getAge())
+        .collect(Collectors.toList());
     mapPerson.put("oldests", oldests);
     mapPerson.put("youngests", youngests);
     return mapPerson;

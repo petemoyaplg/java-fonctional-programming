@@ -4,10 +4,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.plg.javafonctionalprogramming.models.Person;
 import com.plg.javafonctionalprogramming.services.PersonService;
 
@@ -20,9 +23,10 @@ public class PersonController {
   /**
    * @return
    */
-  @GetMapping("v1/list")
-  public ResponseEntity<List<Person>> getAll() {
-    List<Person> poeple = this.personService.findByAll();
+  @GetMapping(value = "v1/list", params = { "page", "size" })
+  public ResponseEntity<Page<Person>> getAll(@RequestParam("page") int page,
+      @RequestParam("size") int size) {
+    Page<Person> poeple = this.personService.findByAll(page, size);
     return ResponseEntity.ok().body(poeple);
   }
 

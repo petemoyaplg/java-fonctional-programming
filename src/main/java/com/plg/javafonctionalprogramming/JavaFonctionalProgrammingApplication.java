@@ -10,6 +10,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.github.javafaker.Faker;
 import com.plg.javafonctionalprogramming.enumeration.Gender;
@@ -31,8 +32,9 @@ public class JavaFonctionalProgrammingApplication implements CommandLineRunner {
 
 	private List<Person> getPeople() {
 		List<Person> poeple = new ArrayList<>();
-		for (int i = 0; i < 10; i++) {
-			Faker faker = new Faker(new Locale("us-US"));
+		for (int i = 0; i < 1500; i++) {
+			// Faker faker = new Faker(new Locale("us-US"));
+			Faker faker = new Faker(Locale.forLanguageTag("us-US"));
 			String firstName = faker.name().firstName();
 			String lastName = faker.name().lastName();
 			String address = faker.address().streetAddress();
@@ -60,10 +62,11 @@ public class JavaFonctionalProgrammingApplication implements CommandLineRunner {
 	}
 
 	@Override
+	@Transactional
 	public void run(String... args) throws Exception {
-		List<Person> people = this.getPeople();
-		log.info("Get Poeple");
-		this.personService.saveAll(people);
+		// List<Person> people = this.getPeople();
+		// log.info("Get Poeple");
+		// this.personService.saveAll(people);
 		log.info("Serveur run");
 	}
 
