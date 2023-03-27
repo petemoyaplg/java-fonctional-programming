@@ -32,7 +32,7 @@ public class JavaFonctionalProgrammingApplication implements CommandLineRunner {
 
 	private List<Person> getPeople() {
 		List<Person> poeple = new ArrayList<>();
-		for (int i = 0; i < 1500; i++) {
+		for (int i = 0; i < 4009; i++) {
 			// Faker faker = new Faker(new Locale("us-US"));
 			Faker faker = new Faker(Locale.forLanguageTag("us-US"));
 			String firstName = faker.name().firstName();

@@ -24,9 +24,8 @@ import lombok.NoArgsConstructor;
 @Entity(name = "person")
 public class Person {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "uuid2")
-  @GenericGenerator(name = "uuid2", strategy = "uuid2")
-  private UUID id;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
   @Column(nullable = false)
   private String fname;
   @Column(nullable = false)

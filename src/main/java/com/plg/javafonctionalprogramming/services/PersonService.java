@@ -95,4 +95,27 @@ public class PersonService {
     mapPerson.put("youngests", youngests);
     return mapPerson;
   }
+
+  public Map<String, Page<Person>> oldestAndYoungests(int page, int size) {
+    Map<String, Page<Person>> mapPerson = new HashMap<>();
+    Sort fnameSort = Sort.by(Direction.DESC, "fname");
+    Sort lnameSort = Sort.by(Direction.DESC, "lname");
+
+    Sort groupBySort = fnameSort.and(lnameSort);
+    PageRequest pr = PageRequest.of(page, size, groupBySort);
+    Page<Person> youngests = this.personRepository.findYoungests(pr);
+    Page<Person> oldests = this.personRepository.findOldests(pr);
+    mapPerson.put("oldests", oldests);
+    mapPerson.put("youngests", youngests);
+    return mapPerson;
+  }
+
+  public Page<Person> getByYearOfBirth(int year, int page, int size) {
+    Sort fnameSort = Sort.by(Direction.DESC, "fname");
+    Sort lnameSort = Sort.by(Direction.DESC, "lname");
+
+    Sort groupBySort = fnameSort.and(lnameSort);
+    PageRequest pr = PageRequest.of(page, size, groupBySort);
+    return this.personRepository.findByYearOfBirth(year, pr);
+  }
 }
